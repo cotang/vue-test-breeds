@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Breed from '@/components/Breed.vue'
 import BreedFilter from '@/components/BreedFilter.vue'
 import axios from 'axios'
@@ -18,7 +17,6 @@ export default {
   data () {
     return {
       chosenBreed: null,
-      doglist: []
     }
   },
   components: {
@@ -26,6 +24,9 @@ export default {
     BreedFilter
   },
   computed: {
+    doglist() {
+      return this.$store.state.mainPageDogs
+    },
     loadedDogsBreeds: function () {
       let doglistArr = this.doglist.map(dogSrc => {
         return dogSrc.split('/')[dogSrc.split('/').length - 2]
@@ -40,25 +41,15 @@ export default {
     }
   },
   mounted () {
-    this.getPictures()
+    this.$store.dispatch('getRandomDogsPictures')
     this.scroll(this.doglist)
   },
   methods: {
-    getPictures () {
-      axios
-        .get('https://dog.ceo/api/breeds/image/random/20')
-        .then(response => response.data)
-        .then(response => (
-          this.doglist = this.doglist.concat(response.message)
-        ))
-        .catch(error => console.error(error))
-    },
-
     scroll (person) {
       window.onscroll = () => {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight
         if (bottomOfWindow) {
-          this.getPictures()
+          this.$store.dispatch('getRandomDogsPictures')
         }
       }
     }

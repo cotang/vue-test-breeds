@@ -10,13 +10,12 @@
 <script>
 import Breed from '@/components/Breed.vue'
 import BreedFilter from '@/components/BreedFilter.vue'
-import axios from 'axios'
 
 export default {
   name: 'Main',
   data () {
     return {
-      chosenBreed: null,
+      chosenBreed: null
     }
   },
   components: {
@@ -24,8 +23,8 @@ export default {
     BreedFilter
   },
   computed: {
-    doglist() {
-      return this.$store.state.mainPageDogs
+    doglist () {
+      return this.$store.state.mainPageDogsPictures
     },
     loadedDogsBreeds: function () {
       let doglistArr = this.doglist.map(dogSrc => {

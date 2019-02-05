@@ -1,14 +1,14 @@
 <template>
   <div class="breed">
-    <div v-for="dogSrc in dogData"
-    :key="dogSrc"
+    <div v-for="(dogSrc, i) in dogData"
+    :key="dogSrc+'-'+i"
     class="img-wrapper"
     :class="{active: isFavourite(dogSrc)}" >
       <img :src="dogSrc" alt="dog">
       <a
       href="#"
       class="img-icon"
-      @click="addToFav(dogSrc)" >&#10084;</a>
+      @click.prevent="addToFav(dogSrc)" >&#10084;</a>
     </div>
   </div>
 </template>
@@ -21,20 +21,14 @@ export default {
   },
   data () {
     return {
-      favArr: (localStorage.getItem('fav')) ? JSON.parse(localStorage.getItem('fav')) : []
     }
   },
   methods: {
     addToFav: function (url) {
-      this.favArr.indexOf(url) === -1 ? this.favArr.push(url) : this.favArr.splice(this.favArr.indexOf(url), 1)
+      this.$store.dispatch('toggleFav', url)
     },
     isFavourite: function (thisDog) {
-      return this.favArr.some(elem => elem === thisDog)
-    }
-  },
-  watch: {
-    favArr: function () {
-      localStorage.setItem('fav', JSON.stringify(this.favArr))
+      return this.$store.state.favouriteDogsPictures.some(elem => elem === thisDog)
     }
   }
 }
